@@ -1,0 +1,46 @@
+server:
+  port: 8095
+  servlet:
+    context-path: /admin
+spring:
+  application:
+    name: administration-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/administration?CreateDatabaseIfNotExist=true
+    username: postgres
+    password: 2334
+#    initialization-mode: always
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+     ddl-auto: update
+    properties:
+      hibernate:
+        dialect : org.hibernate.dialect.PostgreSQLDialect 
+        namingStrategy: org.hibernate.cfg.PhysicalNamingStrategy
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: true
+    
+  cloud:
+    discovery:
+      enabled: false
+      
+swagger:
+  url: http://localhost:8095/admin
+  
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://20.90.104.45:8761/eureka
+  instance:
+    hostname: 20.90.104.45
+#
+#bezkoder:
+#  app:
+#    jwtExpirationMs: 964000000
+#    jwtSecret: bezKoderSecretKey
+

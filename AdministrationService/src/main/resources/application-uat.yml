@@ -1,0 +1,46 @@
+server:
+  port: 8095
+  servlet:
+    context-path: /admin
+spring:
+  application:
+    name: administration-service
+  datasource:
+    url: jdbc:postgresql://db:5432/administration?CreateDatabaseIfNotExist=true
+    username: 
+    password: 
+#    initialization-mode: always
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+     ddl-auto: none
+    properties:
+      hibernate:
+        dialect : org.hibernate.dialect.PostgreSQLDialect 
+        namingStrategy: org.hibernate.cfg.PhysicalNamingStrategy
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: true
+    
+  cloud:
+    discovery:
+      enabled: true
+      
+swagger:
+  url: https://administrationservice.uat.restaurantonesolution.com/admin
+  
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: https://service-registry.uat.restaurantonesolution.com/eureka
+  instance:
+    hostname: 20.90.96.90
+#
+#bezkoder:
+#  app:
+#    jwtExpirationMs: 964000000
+#    jwtSecret: bezKoderSecretKey
+
