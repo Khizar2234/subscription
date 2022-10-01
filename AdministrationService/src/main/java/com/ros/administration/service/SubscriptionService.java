@@ -36,4 +36,8 @@ public interface SubscriptionService {
 	SubscriptionDto editSubscription(SubscriptionDto subsciptionDto) throws SubscriptionNotFoundException;
 
 	String setAllSubscriptionFeatures(String subscriptionCode)throws SubscriptionNotFoundException;
+	
+	List<String> getSubscriptionByProductCode(String productCode);
+	
+	SubscriptionDto getSubscriptionBySubscriptionCode(String subscriptionCode);
 }

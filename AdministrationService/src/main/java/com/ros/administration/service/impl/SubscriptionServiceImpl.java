@@ -214,4 +214,39 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		
 	}
 
+	@Override
+	public List<String> getSubscriptionByProductCode(String productCode) {
+		List<String> subscriptioncodes = new ArrayList<>();
+		List<SubscriptionDto> allSubscriptions = getAllSubscriptions();
+		for(SubscriptionDto s : allSubscriptions) {
+			//System.out.println(s.getProductCode());
+			if(s.getProductCode().equalsIgnoreCase(productCode)) {
+				subscriptioncodes.add(s.getSubscriptionCode());
+			}
+		}
+		return subscriptioncodes;
+	}
+
+	@Override
+	public SubscriptionDto getSubscriptionBySubscriptionCode(String subscriptionCode) {
+		SubscriptionDto subscriptionDto = null;
+		List<SubscriptionDto> allSubscriptions = getAllSubscriptions();
+		for(SubscriptionDto s : allSubscriptions) {
+			if(s.getSubscriptionCode().equalsIgnoreCase(subscriptionCode)) {
+				subscriptionDto=s;
+			}
+		}
+		return subscriptionDto;
+	}
+	
+	public List<String> getAllProductCode() {
+        List<Product> products = productRepository.findAll();
+        List<String> productCodes = new ArrayList<>();
+        if(products!=null && !products.isEmpty()) {
+            for(Product product : products) {
+                productCodes.add(product.getProductCode());
+            }
+        }
+        return productCodes;
+    }
 }

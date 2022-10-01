@@ -20,6 +20,7 @@ import com.ros.administration.controller.dto.subscription.SubscriptionDto;
 import com.ros.administration.exceptions.SubscriptionAlreadyExistsException;
 import com.ros.administration.exceptions.SubscriptionNotFoundException;
 import com.ros.administration.service.SubscriptionService;
+import com.ros.administration.service.impl.SubscriptionServiceImpl;
 import com.ros.administration.util.Properties;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SubscriptionController {
 	
 	@Autowired
-	private SubscriptionService subscriptionService;
+	private SubscriptionServiceImpl subscriptionService;
 	
 	@Operation(summary = "add subcription")
 	@PostMapping("/add")
@@ -146,5 +147,29 @@ public class SubscriptionController {
 		response = new ResponseEntity<List<String>>(subscriptionService.getAllProductName(), HttpStatus.OK);
 		return response;
 	}
+
+	
+	@Operation(summary = "get subscription by product code")
+	@GetMapping("/getSubscriptionByProductCode")
+	public ResponseEntity<?> getSubscriptionByProductCode(@RequestParam String productCode){
+		ResponseEntity<?> response;
+		response = new ResponseEntity<List<String>>(subscriptionService.getSubscriptionByProductCode(productCode), HttpStatus.OK);
+		return response;
+	}
+	
+	@Operation(summary = "get subscription by subscription code")
+	@GetMapping("/getSubscriptionCodeBySubscriptionCode")
+	public ResponseEntity<?> getSubscriptionBySubscriptionCode(@RequestParam String subscriptionCode){
+		ResponseEntity<?> response;
+		response = new ResponseEntity<SubscriptionDto>(subscriptionService.getSubscriptionBySubscriptionCode(subscriptionCode), HttpStatus.OK);
+		return response;
+	}
+	
+	@GetMapping("/getAllProductCodes")
+    public ResponseEntity<?> getAllProductCodes(){
+        ResponseEntity<?> response;
+        response = new ResponseEntity<List<String>>(subscriptionService.getAllProductCode(), HttpStatus.OK);
+        return response;    
+    }
 	
 }

@@ -6,7 +6,7 @@ spring:
   application:
     name: administration-service
   datasource:
-    url: jdbc:postgresql://sqladmin.postgres.database.azure.com:5432/administration?&sslmode=require
+    url: jdbc:postgresql://sqladmin.postgres.database.azure.com:5432/Group_d_subscription?&sslmode=require
     username: sqladmins
     password: password@123
 #    initialization-mode: always
