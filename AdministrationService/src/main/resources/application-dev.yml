@@ -1,12 +1,12 @@
 server:
   port: 8095
   servlet:
-    context-path: /admin
+    context-path: /subscription
 spring:
   application:
     name: administration-service
   datasource:
-    url: jdbc:postgresql://inventory.postgres.database.azure.com:5432/Group_d_subscription?&sslmode=require
+    url: jdbc:postgresql://inventory.postgres.database.azure.com:5432/Subscription?&sslmode=require
     username: adminroot
     password: password@123
 #    initialization-mode: always
@@ -28,7 +28,7 @@ spring:
       enabled: true
       
 swagger:
-  url: https://administrationservice.test.restaurantonesolution.com/admin
+  url: https://administrationservice.test.restaurantonesolution.com/subscription
   
 eureka:
   client:
