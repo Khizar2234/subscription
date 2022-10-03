@@ -1,10 +1,24 @@
 package com.ros.administration.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ros.administration.controller.dto.account.ClientAccountSubscriptionDto;
 import com.ros.administration.controller.dto.account.ClientAddDto;
 import com.ros.administration.controller.dto.account.ClientDetailedInfoDto;
 import com.ros.administration.controller.dto.account.ClientDto;
-import com.ros.administration.exceptions.*;
+import com.ros.administration.exceptions.AccountSubscriptionNotFoundException;
+import com.ros.administration.exceptions.ClientAccountStatusNotFoundException;
+import com.ros.administration.exceptions.ClientNotFoundException;
+import com.ros.administration.exceptions.PrimaryContactNotFoundException;
+import com.ros.administration.exceptions.UserNotFoundException;
 import com.ros.administration.mapper.AccountMapper;
 import com.ros.administration.mapper.AddressMapper;
 import com.ros.administration.mapper.ClientMapper;
@@ -12,7 +26,11 @@ import com.ros.administration.mapper.PrimaryContactMapper;
 import com.ros.administration.mapper.UserMapper;
 import com.ros.administration.model.Address;
 import com.ros.administration.model.Country;
-import com.ros.administration.model.account.*;
+import com.ros.administration.model.account.Account;
+import com.ros.administration.model.account.AccountSubscription;
+import com.ros.administration.model.account.Client;
+import com.ros.administration.model.account.PrimaryContact;
+import com.ros.administration.model.account.User;
 import com.ros.administration.model.enums.EStatus;
 import com.ros.administration.model.subscription.Subscription;
 import com.ros.administration.repository.AccountRepository;
@@ -27,17 +45,6 @@ import com.ros.administration.service.ClientService;
 import com.ros.administration.service.UserPermissionsService;
 import com.ros.administration.service.UserService;
 import com.ros.administration.util.Properties;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -56,7 +63,7 @@ public class ClientServiceImpl implements ClientService {
 
 	@Autowired
 	private AccountRepository accountRepository;
-	
+
 	@Autowired
 	private PrimaryContactRepository primaryContactRepository;
 
@@ -75,13 +82,13 @@ public class ClientServiceImpl implements ClientService {
 
 	@Autowired
 	private AccountMapper accountMapper;
-	
+
 	@Autowired
 	private UserMapper userMapper;
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private SubscriptionRepository subscriptionRepository;
 
@@ -98,7 +105,7 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public ClientDetailedInfoDto getClientInfoDetails(UUID id) {
 		Client client = clientReposistory.findByUUID(id);
-//		System.out.println(client.getPrimaryContact());
+		//		System.out.println(client.getPrimaryContact());
 		return clientMapper.convertToClientDetailedInfoDto(client);
 	}
 
@@ -119,7 +126,7 @@ public class ClientServiceImpl implements ClientService {
 
 		return clientMapper.convertToClientDto(clientReposistory.save(client));
 	}
- 
+
 	@Transactional
 	@Override
 	public ClientDto addClient(ClientAddDto clientAddDto) {
@@ -175,7 +182,7 @@ public class ClientServiceImpl implements ClientService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		userRepository.saveUserAccountData(user.getId(),account.getId());
+		//		userRepository.saveUserAccountData(user.getId(),account.getId());
 		return account;
 	}
 
@@ -183,23 +190,23 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public List<AccountSubscription> createAccountSubscriptionsByCode(List<String> subscriptionCodes, String activatedBy) {
 		List<AccountSubscription> accountSubscriptions = new ArrayList<>();
-		
+
 		for(String subscriptionCode:subscriptionCodes) {
-		Optional<Subscription> subscription = subscriptionRepository.findBySubscriptionCode(subscriptionCode);
-		
-		if (subscription.isPresent()) {
-			AccountSubscription accSubscription = new AccountSubscription(UUID.randomUUID(), subscription.get(),
-					activatedBy, new Date(), new Date(), EStatus.ACTIVE);
+			Optional<Subscription> subscription = subscriptionRepository.findBySubscriptionCode(subscriptionCode);
 
-			accountSubscriptions.add(accSubscription);
-//			userRepository.saveUserAccountSubscriptionData(user.getId(),account.getAccountSubscriptions().get(0).getId());
-//		account.setAccountSubscriptions(accSubscription);
+			if (subscription.isPresent()) {
+				AccountSubscription accSubscription = new AccountSubscription(UUID.randomUUID(), subscription.get(),
+						activatedBy, new Date(), new Date(), EStatus.ACTIVE);
 
-//		List<AccountSubscription> accountSubscriptions = account.getAccountSubscriptions();
+				accountSubscriptions.add(accSubscription);
+				//			userRepository.saveUserAccountSubscriptionData(user.getId(),account.getAccountSubscriptions().get(0).getId());
+				//		account.setAccountSubscriptions(accSubscription);
 
+				//		List<AccountSubscription> accountSubscriptions = account.getAccountSubscriptions();
+
+			}
 		}
-		}
-		return accountSubscriptions; 
+		return accountSubscriptions;
 	}
 
 	@Override
@@ -236,10 +243,29 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public ClientAccountSubscriptionDto getAccountSubscriptionsForClient(UUID clientId)
 			throws AccountSubscriptionNotFoundException {
-		
+
 		Client client = clientReposistory.findByUUID(clientId);
-		if (client!=null && client.getAccount()!=null) {
+		if (client != null && client.getAccount() != null) {
 			return clientMapper.convertToAccountSubsciptionDto(client.getAccount());
+		} else {
+			throw new AccountSubscriptionNotFoundException(Properties.accountSubscriptionNotFound);
+		}
+	}
+
+	@Override
+	public List<ClientAccountSubscriptionDto> getAllAccountSubscriptionsForClients()
+			throws AccountSubscriptionNotFoundException {
+		List<ClientAccountSubscriptionDto> subscriptions = new ArrayList<ClientAccountSubscriptionDto>();
+		List<Client> clients = new ArrayList<Client>();
+		clients = clientReposistory.findAll();
+		//		Client client = clientReposistory.findByUUID(clientId);
+		for(Client client : clients) {
+			if (client!=null && client.getAccount()!=null) {
+				subscriptions.add(clientMapper.convertToAccountSubsciptionDto(client.getAccount()));
+			}
+		}
+		if (!(subscriptions.isEmpty())) {
+			return subscriptions;
 		}
 		else {
 			throw new AccountSubscriptionNotFoundException(Properties.accountSubscriptionNotFound);
@@ -263,7 +289,7 @@ public class ClientServiceImpl implements ClientService {
 		actStatus = clientReposistory.save(actStatus);
 		return clientMapper.convertToClientDetailedInfoDto(actStatus);
 
-		}
+	}
 
 	@Override
 	public ClientDetailedInfoDto getClientDetailsByAccountId(UUID id) throws ClientNotFoundException {
@@ -275,76 +301,76 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public ClientDetailedInfoDto viewClientByEmail(String primaryContactEmail) throws  ClientNotFoundException{
 		Client client = clientReposistory.findByPrimaryEmail(primaryContactEmail);
-				return clientMapper.convertToClientDetailedInfoDto(client);
+		return clientMapper.convertToClientDetailedInfoDto(client);
 	}
 
-//	@Override
-//	public String setClientPin(UUID clientId, String pin) throws Exception {
-//	
-//		if(! clientReposistory.existsById(clientId))
-//			throw new Exception("Client with Client Id: "+ clientId + " doesnpt exists!");
-//		
-//		Client client = clientReposistory.findByUUID(clientId);
-//		
-//		String clientPinHash = BCrypt.hashpw(pin, BCrypt.gensalt());
-//		
-//		client.setClientPinHash(clientPinHash);
-//		
-//		clientReposistory.save(client);
-//
-//		return "Client Pin added Scuccessfully";
-//	}
-//
-//	@Override
-//	public String editClientPin(UUID clientId, String oldPin, String newPin) throws Exception {
-//
-//		if(! clientReposistory.existsById(clientId))
-//			throw new Exception("Client with Client Id: "+ clientId + " doesnot exists!");
-//		
-//		Client client = clientReposistory.findByUUID(clientId);
-//		
-//		if(! (BCrypt.checkpw(oldPin, client.getClientPinHash())))
-//			throw new Exception("Old Pin doesnot Match!");
-//
-//		
-//		List<Client> clients = clientReposistory.findAll();
-//		
-//		boolean uniquePin = true;
-//		
-//		while(uniquePin) {
-//			for(Client c: clients) {
-//				
-//				if (BCrypt.checkpw(newPin, c.getClientPinHash()))
-//					uniquePin = false;
-//					
-//			}
-//			
-//		if(!uniquePin)	
-//			throw new Exception("Please enter an Unique Pin!");
-//
-//		
-//			
-//		}
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		return null;
-//	}
-//
-//	@Override
-//	public String verifyClientPin(UUID clientId, String pin) throws Exception {
-//
-//		if(! clientReposistory.existsById(clientId))
-//			throw new Exception("Client with Client Id: "+ clientId + " doesnpt exists!");
-//		
-//		return null;
-//	}
+	//	@Override
+	//	public String setClientPin(UUID clientId, String pin) throws Exception {
+	//
+	//		if(! clientReposistory.existsById(clientId))
+	//			throw new Exception("Client with Client Id: "+ clientId + " doesnpt exists!");
+	//
+	//		Client client = clientReposistory.findByUUID(clientId);
+	//
+	//		String clientPinHash = BCrypt.hashpw(pin, BCrypt.gensalt());
+	//
+	//		client.setClientPinHash(clientPinHash);
+	//
+	//		clientReposistory.save(client);
+	//
+	//		return "Client Pin added Scuccessfully";
+	//	}
+	//
+	//	@Override
+	//	public String editClientPin(UUID clientId, String oldPin, String newPin) throws Exception {
+	//
+	//		if(! clientReposistory.existsById(clientId))
+	//			throw new Exception("Client with Client Id: "+ clientId + " doesnot exists!");
+	//
+	//		Client client = clientReposistory.findByUUID(clientId);
+	//
+	//		if(! (BCrypt.checkpw(oldPin, client.getClientPinHash())))
+	//			throw new Exception("Old Pin doesnot Match!");
+	//
+	//
+	//		List<Client> clients = clientReposistory.findAll();
+	//
+	//		boolean uniquePin = true;
+	//
+	//		while(uniquePin) {
+	//			for(Client c: clients) {
+	//
+	//				if (BCrypt.checkpw(newPin, c.getClientPinHash()))
+	//					uniquePin = false;
+	//
+	//			}
+	//
+	//		if(!uniquePin)
+	//			throw new Exception("Please enter an Unique Pin!");
+	//
+	//
+	//
+	//		}
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//		return null;
+	//	}
+	//
+	//	@Override
+	//	public String verifyClientPin(UUID clientId, String pin) throws Exception {
+	//
+	//		if(! clientReposistory.existsById(clientId))
+	//			throw new Exception("Client with Client Id: "+ clientId + " doesnpt exists!");
+	//
+	//		return null;
+	//	}
 
-	
+
 }

@@ -8,31 +8,28 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/administration?CreateDatabaseIfNotExist=true
     username: postgres
-    password: password
-#    url: jdbc:postgresql://sqladmin.postgres.database.azure.com:5432/Group_d_subscription?
-#    username: vikas.narsappa@pratian.com
-#    password: mysecret
-#    initialization-mode: always
+    password: root
+    #    initialization-mode: always
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-     ddl-auto: update
+      ddl-auto: update
     properties:
       hibernate:
-        dialect : org.hibernate.dialect.PostgreSQLDialect 
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         namingStrategy: org.hibernate.cfg.PhysicalNamingStrategy
         jdbc:
           lob:
             non_contextual_creation: true
     show-sql: true
-    
+
   cloud:
     discovery:
       enabled: false
-      
+
 swagger:
   url: http://localhost:8095/admin
-  
+
 eureka:
   client:
     register-with-eureka: false
@@ -46,14 +43,4 @@ eureka:
 #  app:
 #    jwtExpirationMs: 964000000
 #    jwtSecret: bezKoderSecretKey
-
-# spring:
-#   jpa:
-#     properties:
-#       hibernate:
-#         enable_lazy_load_no_trans:true
-razorpay:
-  secretid: rzp_test_MlDHdL9HTyE2I5
-  secretkey: eS6FYcK29GqSMKT0nQuKv1Fb
-
 
