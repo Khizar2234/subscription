@@ -1,5 +1,7 @@
 package com.ros.administration.controller;
 
+import javax.json.JsonObject;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,7 +29,7 @@ import com.ros.administration.util.Properties;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONObject;
+//import net.minidev.json.JSONObject;
 
 @RestController
 @RequestMapping(value = "/azure")
@@ -61,7 +63,7 @@ public class AzureADController {
 	@ResponseBody
 	@RosLogDebug
 	@Operation(summary = "userSignUp")
-	public ResponseEntity<?> userSignUp(@RequestBody JSONObject object, @RequestParam String token) {
+	public ResponseEntity<?> userSignUp(@RequestBody JsonObject object, @RequestParam String token) {
 		ResponseEntity<?> response;
 		try {
 			RestTemplate restTemplate = new RestTemplate();

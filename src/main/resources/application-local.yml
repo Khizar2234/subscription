@@ -3,12 +3,14 @@ server:
   servlet:
     context-path: /admin
 spring:
+  main: 
+    allow-circular-references: true
   application:
     name: administration-service
   datasource:
     url: jdbc:postgresql://localhost:5432/administration?CreateDatabaseIfNotExist=true
     username: postgres
-    password: password
+    password: 03022000
 #    url: jdbc:postgresql://sqladmin.postgres.database.azure.com:5432/Group_d_subscription?
 #    username: vikas.narsappa@pratian.com
 #    password: mysecret
