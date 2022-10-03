@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -75,5 +76,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	@Query(value = "update \"user\"  set account_subscription_id =:accounSubscriptiontId where user_id=:userId", nativeQuery = true)
 	void saveUserAccountSubscriptionData(@Param("userId") UUID userId,@Param("accounSubscriptiontId")  UUID accountSubscriptionId);
 
+	@Query(value = "select Cast(user_id as varchar) user_id from user_restaurant where restaurant_id=:restaurantId", nativeQuery = true)
+    List<UUID> getuserIdsFromRestaurantId(@Param("restaurantId") UUID restaurantId);
 
 }

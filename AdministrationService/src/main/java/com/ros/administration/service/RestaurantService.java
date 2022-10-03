@@ -13,6 +13,7 @@ import com.ros.administration.exceptions.RestaurantAlreadyExistsException;
 import com.ros.administration.exceptions.RestaurantIntegrationAlreadyExistsException;
 import com.ros.administration.exceptions.RestaurantNotFoundException;
 import com.ros.administration.exceptions.UserRestaurantAlreadyExistsException;
+import com.ros.administration.model.Restaurant;
 
 @Service
 public interface RestaurantService {
@@ -60,6 +61,6 @@ public interface RestaurantService {
 
 	String verifyRestaurantPin(UUID restaurantId, String pin) throws Exception;
 
-
+	List<Restaurant> getListOfRestaurants(UUID clientId);
 
 }

@@ -75,7 +75,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		}
 	}
 
-	private String getCodeIfSubscriptionExists(String subscriptionCode) {
+	public String getCodeIfSubscriptionExists(String subscriptionCode) {
 		Optional<Subscription> subscription =subscriptionRepository.findBySubscriptionCode(subscriptionCode);
 		if(subscription.isPresent()) {
 			return subscription.get().getSubscriptionCode();

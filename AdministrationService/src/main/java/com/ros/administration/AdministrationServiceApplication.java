@@ -1,6 +1,7 @@
 package com.ros.administration;
 
 import java.util.ArrayList;
+//import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.List;
 
 import com.ros.administration.mapper.*;
@@ -9,6 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -18,6 +21,7 @@ import io.swagger.v3.oas.models.servers.Server;
 @SpringBootApplication
 @EnableJpaAuditing
 @OpenAPIDefinition(info = @Info(title = "AdministrationServiceAPI", version = "1.0", description = "API for Administration Service"))
+//@EnableSwagger2
 public class AdministrationServiceApplication {
 
 	@Value(value = "${swagger.url}")
@@ -100,6 +104,17 @@ public class AdministrationServiceApplication {
 	  @Bean public ProductMapper ProductMapper() { 
 		  return new ProductMapperImpl();
 	  }
+	  
+	  @Bean
+	   public WebMvcConfigurer corsConfigurer() 
+	   {
+	       return new WebMvcConfigurer() {
+	           @Override
+	           public void addCorsMappings(CorsRegistry registry) {
+	               registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
+	           }
+	       };
+	   }
 	 
 
 }

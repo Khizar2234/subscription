@@ -36,6 +36,7 @@ import com.ros.administration.exceptions.ErrorHandler;
 import com.ros.administration.exceptions.UserAlreadyExistsException;
 import com.ros.administration.exceptions.UserNotFoundException;
 import com.ros.administration.model.enums.EStatus;
+import com.ros.administration.service.RestaurantService;
 import com.ros.administration.service.UserService;
 import com.ros.administration.util.ExceptionHandler;
 
@@ -50,7 +51,9 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	@Autowired
 	private UserService userService;
-
+	
+	@Autowired
+	private RestaurantService restaurantService;
 	// Returns UserDto when successful
 	@Operation(summary = "add user")
 	@PostMapping
@@ -397,5 +400,4 @@ public class UserController {
 		}
 		return response;
 	}
-	
 }

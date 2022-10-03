@@ -63,4 +63,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
 
    
 
+    @Query(value="select * from restaurant where restaurant.client_id=:clientId",nativeQuery=true)
+    List<Restaurant> ListOfRestaurentsByClientId(@Param("clientId")UUID clientId);
 }

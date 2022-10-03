@@ -9,6 +9,7 @@ import com.ros.administration.controller.dto.ProductDto;
 import com.ros.administration.controller.dto.subscription.SubscriptionDto;
 import com.ros.administration.exceptions.SubscriptionAlreadyExistsException;
 import com.ros.administration.exceptions.SubscriptionNotFoundException;
+import com.ros.administration.model.subscription.SubscriptionPackageSpecification;
 
 @Service
 public interface SubscriptionService {
@@ -36,4 +37,6 @@ public interface SubscriptionService {
 	SubscriptionDto editSubscription(SubscriptionDto subsciptionDto) throws SubscriptionNotFoundException;
 
 	String setAllSubscriptionFeatures(String subscriptionCode)throws SubscriptionNotFoundException;
+	
+	
 }

@@ -6,10 +6,11 @@ spring:
   application:
     name: administration-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/administration?CreateDatabaseIfNotExist=true
+
+    url: jdbc:postgresql://localhost:5432/administration?CreateDatabaseIfNotExist=true
     username: postgres
-    password: 2334
-#    initialization-mode: always
+    password: password
+    initialization-mode: always
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -38,6 +39,8 @@ eureka:
       defaultZone: http://20.90.104.45:8761/eureka
   instance:
     hostname: 20.90.104.45
+
+  
 #
 #bezkoder:
 #  app:

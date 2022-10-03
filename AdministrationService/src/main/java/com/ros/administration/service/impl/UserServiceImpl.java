@@ -43,6 +43,7 @@ import com.ros.administration.model.Restaurant;
 import com.ros.administration.model.account.Account;
 import com.ros.administration.model.account.AccountSubscription;
 import com.ros.administration.model.account.Client;
+import com.ros.administration.model.account.Role;
 import com.ros.administration.model.account.User;
 import com.ros.administration.model.account.UserProfile;
 import com.ros.administration.model.enums.ERole;
@@ -564,6 +565,20 @@ public class UserServiceImpl implements UserService {
 		return restaurantDtos;
 	}
 	
-	
+	@Override
+    public List<UUID> getUserIdsFromRestaurantId(UUID restaurantId) {
+        List<UUID> user_ids=userRepository.getuserIdsFromRestaurantId(restaurantId);
+        return user_ids;
+    }
+    
+    @Override
+    public int totalCountOfUsersFromrestaurants(List<Restaurant> restaurants) {
+        int count=0;
+        for(Restaurant r:restaurants) {
+            List<UUID> userIds=getUserIdsFromRestaurantId(r.getId());
+            count+=userIds.size();
+        }
+        return count;
+    }
 
 }

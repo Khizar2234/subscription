@@ -1,5 +1,7 @@
 package com.ros.administration.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,13 +15,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ros.administration.controller.dto.ProductDto;
 import com.ros.administration.controller.dto.subscription.SubscriptionDto;
 import com.ros.administration.exceptions.SubscriptionAlreadyExistsException;
 import com.ros.administration.exceptions.SubscriptionNotFoundException;
+import com.ros.administration.service.RestaurantService;
 import com.ros.administration.service.SubscriptionService;
+import com.ros.administration.service.UserService;
 import com.ros.administration.util.Properties;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,12 +32,18 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/subscription")
-@CrossOrigin("*")
+//@CrossOrigin(value="http://localhost:4200",allowedHeaders = "*",allowedMethods="*")
 @Slf4j
 public class SubscriptionController {
 	
 	@Autowired
 	private SubscriptionService subscriptionService;
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private RestaurantService restaurantService;
 	
 	@Operation(summary = "add subcription")
 	@PostMapping("/add")
@@ -145,6 +156,21 @@ public class SubscriptionController {
 		ResponseEntity<?> response;
 		response = new ResponseEntity<List<String>>(subscriptionService.getAllProductName(), HttpStatus.OK);
 		return response;
+	}
+	
+	@Operation(summary = "get subscription usage of a client ")
+	@GetMapping("/getSubscriptionUsage")
+	@ResponseBody
+	public ResponseEntity<?> getSubscriptionUsage(@RequestParam UUID clientId){
+		ResponseEntity<?> response;
+		int userCount=userService.totalCountOfUsersFromrestaurants(restaurantService.getListOfRestaurants(clientId));
+		int restaurantCount=restaurantService.getListOfRestaurants(clientId).size();
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("userCount", userCount);
+	    map.put("restaurantCount", restaurantCount);
+	    response=new ResponseEntity<HashMap<String, Integer>>(map,HttpStatus.OK);
+	    return response;
+		
 	}
 	
 }
