@@ -76,4 +76,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	void saveUserAccountSubscriptionData(@Param("userId") UUID userId,@Param("accounSubscriptiontId")  UUID accountSubscriptionId);
 
 
+    @Query(value = "select Cast(user_id as varchar) user_id from user_restaurant where restaurant_id=:restaurantId", nativeQuery = true)
+    List<UUID> getuserIdsFromRestaurantId(@Param("restaurantId") UUID restaurantId);
+
 }

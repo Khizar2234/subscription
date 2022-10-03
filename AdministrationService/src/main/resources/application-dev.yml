@@ -43,4 +43,6 @@ eureka:
 #  app:
 #    jwtExpirationMs: 964000000
 #    jwtSecret: bezKoderSecretKey
-
+razorpay:
+  secretid: rzp_test_ZIZjFofMxouZaR
+  secretkey: DwEGVESHg0q3vb7mb1Ibd6wu

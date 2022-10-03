@@ -61,6 +61,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
     @Query(value="delete from restaurant where restaurant_id=:restaurantId",nativeQuery = true)
 	void deleteRestaurant( @Param("restaurantId") UUID restaurantId);
 
-   
+    @Query(value="select * from restaurant where restaurant.client_id=:clientId",nativeQuery=true)
+    List<Restaurant> ListOfRestaurentsByClientId(@Param("clientId")UUID clientId);
+
 
 }

@@ -82,17 +82,17 @@ public class ClientController {
 	}
 
 	@Operation(summary = "get Client Account subcriptions")
-	@RosLogDebug
-	@GetMapping("/getClientAccountSubscriptions")
-	public ResponseEntity<?> getAccountSubscriptionsForClient(@RequestParam UUID clientId){
-	ResponseEntity<?> response;
-	try {
-	response = new ResponseEntity<ClientAccountSubscriptionDto>(clientService.getAccountSubscriptionsForClient(clientId), HttpStatus.OK);
-	} catch (AccountSubscriptionNotFoundException e) {
-		response = new ResponseEntity<ExceptionHandler>(new ExceptionHandler(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	return response;
-	}
+    @RosLogDebug
+    @GetMapping("/getClientAccountSubscriptions")
+    public ResponseEntity<?> getAccountSubscriptionsForClient(@RequestParam UUID clientId){
+    ResponseEntity<?> response;
+    try {
+    response = new ResponseEntity<ClientAccountSubscriptionDto>(clientService.getAccountSubscriptionsForClient(clientId), HttpStatus.OK);
+    } catch (AccountSubscriptionNotFoundException e) {
+        response = new ResponseEntity<ExceptionHandler>(new ExceptionHandler(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return response;
+    }
 	
 	@PutMapping
 	@RosLogDebug

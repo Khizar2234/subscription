@@ -591,5 +591,10 @@ public class RestaurantServiceImpl implements RestaurantService {
 			return  "Restaurant Validated Failed, Please enter the correct Pin for Restaurant: "+ res.getName();
 
 	}
+	public List<Restaurant> getListOfRestaurants(UUID clientId) {
+        List<Restaurant> restaurants=restaurantRepository.ListOfRestaurentsByClientId(clientId);
+        return restaurants;
+    }
+
 
 }

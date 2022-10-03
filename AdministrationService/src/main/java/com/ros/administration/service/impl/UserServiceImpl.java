@@ -563,7 +563,22 @@ public class UserServiceImpl implements UserService {
 		
 		return restaurantDtos;
 	}
-	
+	@Override
+    public List<UUID> getUserIdsFromRestaurantId(UUID restaurantId) {
+        List<UUID> user_ids=userRepository.getuserIdsFromRestaurantId(restaurantId);
+        return user_ids;
+    }
+    
+    @Override
+    public int totalCountOfUsersFromrestaurants(List<Restaurant> restaurants) {
+        int count=0;
+        for(Restaurant r:restaurants) {
+            List<UUID> userIds=getUserIdsFromRestaurantId(r.getId());
+            count+=userIds.size();
+        }
+        return count;
+    }
+
 	
 
 }

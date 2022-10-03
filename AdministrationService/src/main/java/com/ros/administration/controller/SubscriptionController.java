@@ -1,5 +1,6 @@
 package com.ros.administration.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,13 +14,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ros.administration.controller.dto.ProductDto;
 import com.ros.administration.controller.dto.subscription.SubscriptionDto;
 import com.ros.administration.exceptions.SubscriptionAlreadyExistsException;
 import com.ros.administration.exceptions.SubscriptionNotFoundException;
+import com.ros.administration.model.Restaurant;
+import com.ros.administration.service.RestaurantService;
 import com.ros.administration.service.SubscriptionService;
+import com.ros.administration.service.UserService;
 import com.ros.administration.service.impl.SubscriptionServiceImpl;
 import com.ros.administration.util.Properties;
 
@@ -34,6 +39,10 @@ public class SubscriptionController {
 	
 	@Autowired
 	private SubscriptionServiceImpl subscriptionService;
+	@Autowired
+	private RestaurantService restaurantService;
+	@Autowired
+	private UserService userService;
 	
 	@Operation(summary = "add subcription")
 	@PostMapping("/add")
@@ -172,4 +181,19 @@ public class SubscriptionController {
         return response;    
     }
 	
+	@Operation(summary = "get subscription usage of a client ")
+    @GetMapping("/getSubscriptionUsage")
+    @ResponseBody
+    public ResponseEntity<?> getSubscriptionUsage(@RequestParam UUID clientId){
+        ResponseEntity<?> response;
+        int userCount=userService.totalCountOfUsersFromrestaurants(restaurantService.getListOfRestaurants(clientId));
+        int restaurantCount=restaurantService.getListOfRestaurants(clientId).size();
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("userCount", userCount);
+        map.put("restaurantCount", restaurantCount);
+        response=new ResponseEntity<HashMap<String, Integer>>(map,HttpStatus.OK);
+        return response;
+        
+    }
+
 }

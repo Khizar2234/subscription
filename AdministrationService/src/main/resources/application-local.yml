@@ -52,4 +52,8 @@ eureka:
 #     properties:
 #       hibernate:
 #         enable_lazy_load_no_trans:true
-          
+razorpay:
+  secretid: rzp_test_MlDHdL9HTyE2I5
+  secretkey: eS6FYcK29GqSMKT0nQuKv1Fb
+
+
