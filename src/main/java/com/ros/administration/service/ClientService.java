@@ -49,7 +49,11 @@ public interface ClientService {
 
 	ClientDetailedInfoDto viewClientByEmail(String primaryContactEmail) throws ClientNotFoundException;
 	
+//	ClientAccountSubscriptionDto getAccountSubscriptionsForClient(UUID clientId) throws AccountSubscriptionNotFoundException;
 	
+	List<ClientAccountSubscriptionDto> getAllAccountSubscriptionsForClients() throws AccountSubscriptionNotFoundException;
+
+
 	
 	
 

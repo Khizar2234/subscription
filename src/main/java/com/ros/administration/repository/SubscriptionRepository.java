@@ -21,5 +21,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, UUID
 	
 	@Query("select s from Subscription s where s.subscriptionCode is not null")
 	List<Subscription> findSubscriptions();
-
+	
 }

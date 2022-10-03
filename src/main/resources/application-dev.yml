@@ -1,13 +1,14 @@
 server:
-  port: 8095
+  port: 8097
   servlet:
-    context-path: /admin
+    context-path: /subscription
 spring:
   application:
     name: administration-service
   datasource:
-    url: jdbc:postgresql://sqladmin.postgres.database.azure.com:5432/Group_d_subscription?&sslmode=require
-    username: sqladmins
+#    url: jdbc:postgresql://sqladmin.postgres.database.azure.com:5432/Group_d_subscription?&sslmode=require
+    url: jdbc:postgresql://inventory.postgres.database.azure.com:5432/Subscription?&sslmode=require
+    username: adminroot
     password: password@123
 #    initialization-mode: always
     driver-class-name: org.postgresql.Driver
@@ -25,15 +26,15 @@ spring:
     
   cloud:
     discovery:
-      enabled: true
+      enabled: false
       
 swagger:
-  url: https://administrationservice.test.restaurantonesolution.com/admin
+  url: https://subscription-service.ros.skillassure.com/subscription
   
 eureka:
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: https://service-registry.test.restaurantonesolution.com/eureka
   instance:

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ros.administration.controller.dto.ProductDto;
+import com.ros.administration.controller.dto.account.AccountSubscriptionDto;
+import com.ros.administration.controller.dto.account.AccountSubscriptionDto2;
 import com.ros.administration.controller.dto.subscription.SubscriptionDto;
 import com.ros.administration.exceptions.SubscriptionAlreadyExistsException;
 import com.ros.administration.exceptions.SubscriptionNotFoundException;
@@ -174,6 +176,7 @@ public class SubscriptionController {
 		return response;
 	}
 	
+	@Operation(summary = "get all Product Codes")
 	@GetMapping("/getAllProductCodes")
     public ResponseEntity<?> getAllProductCodes(){
         ResponseEntity<?> response;
@@ -186,14 +189,37 @@ public class SubscriptionController {
     @ResponseBody
     public ResponseEntity<?> getSubscriptionUsage(@RequestParam UUID clientId){
         ResponseEntity<?> response;
-        int userCount=userService.totalCountOfUsersFromrestaurants(restaurantService.getListOfRestaurants(clientId));
+        List<Restaurant> restaurants=restaurantService.getListOfRestaurants(clientId);
+        int userCount=userService.totalCountOfUsersFromrestaurants(restaurants);
         int restaurantCount=restaurantService.getListOfRestaurants(clientId).size();
+        int employeeCount=userService.totalEmployeesFromRestaurants(restaurants);
         HashMap<String, Integer> map = new HashMap<>();
         map.put("userCount", userCount);
         map.put("restaurantCount", restaurantCount);
+        map.put("employeeCount", employeeCount);
         response=new ResponseEntity<HashMap<String, Integer>>(map,HttpStatus.OK);
         return response;
-        
+    }
+	
+	@PutMapping("/deactivateAccountSubscription")
+    public ResponseEntity<?> updateActiveOrDeactiveAccountSubscription(
+            @RequestBody AccountSubscriptionDto2 subscriptionDto) {
+        ResponseEntity<?> response;
+        //      try {
+        response = new ResponseEntity<String>(
+                subscriptionService.updateActiveOrDeactiveAccountSubscription(subscriptionDto), HttpStatus.OK);
+        //      } catch (SubscriptionNotFoundException e) {
+        //          response = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        //      }
+        return response;
     }
 
+    @Operation(summary = "get account subcription By Id")
+    @GetMapping("/getAccountSubscriptionById")
+    public ResponseEntity<?> getAccountSubscriptionById(@RequestParam UUID id) {
+        ResponseEntity<?> response;
+        response = new ResponseEntity<AccountSubscriptionDto>(subscriptionService.getAccountSubscriptionById(id),
+                HttpStatus.OK);
+        return response;
+    }
 }

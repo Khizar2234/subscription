@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountSubscriptionDto {
+    private UUID accountSubId;
 	private SubscriptionDto subscription;
 	private String activatedBy;
 	private Date activatedDate;

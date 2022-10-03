@@ -278,6 +278,26 @@ public class ClientServiceImpl implements ClientService {
 				return clientMapper.convertToClientDetailedInfoDto(client);
 	}
 
+	 @Override
+	    public List<ClientAccountSubscriptionDto> getAllAccountSubscriptionsForClients()
+	            throws AccountSubscriptionNotFoundException {
+	        List<ClientAccountSubscriptionDto> subscriptions = new ArrayList<ClientAccountSubscriptionDto>();
+	        List<Client> clients = new ArrayList<Client>();
+	        clients = clientReposistory.findAll();
+	        //        Client client = clientReposistory.findByUUID(clientId);
+	        for(Client client : clients) {
+	            if (client!=null && client.getAccount()!=null) {
+	                subscriptions.add(clientMapper.convertToAccountSubsciptionDto(client.getAccount()));
+	            }
+	        }
+	        if (!(subscriptions.isEmpty())) {
+	            return subscriptions;
+	        }
+	        else {
+	            throw new AccountSubscriptionNotFoundException(Properties.accountSubscriptionNotFound);
+	        }
+	    }
+
 //	@Override
 //	public String setClientPin(UUID clientId, String pin) throws Exception {
 //	

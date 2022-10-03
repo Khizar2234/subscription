@@ -90,5 +90,5 @@ public interface UserService {
 	
     int totalCountOfUsersFromrestaurants(List<Restaurant> restaurants);
 
-
+    int totalEmployeesFromRestaurants(List<Restaurant> restaurants);
 }

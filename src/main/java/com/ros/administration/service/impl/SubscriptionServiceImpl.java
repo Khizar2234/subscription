@@ -19,6 +19,8 @@ import com.ros.administration.mapper.ProductMapper;
 import com.ros.administration.mapper.SubscriptionMapper;
 import com.ros.administration.model.Feature;
 import com.ros.administration.model.Product;
+import com.ros.administration.model.account.AccountSubscription;
+import com.ros.administration.model.enums.EStatus;
 import com.ros.administration.model.subscription.Subscription;
 import com.ros.administration.model.subscription.SubscriptionFeature;
 import com.ros.administration.model.subscription.enums.SubcriptionFrequency;
@@ -29,8 +31,10 @@ import com.ros.administration.repository.ProductRepository;
 import com.ros.administration.repository.SubscriptionFeatureRepository;
 import com.ros.administration.repository.SubscriptionPackageSpecificationRepository;
 import com.ros.administration.repository.SubscriptionRepository;
+import com.ros.administration.controller.dto.account.*;
 import com.ros.administration.service.SubscriptionService;
 import com.ros.administration.util.Properties;
+import com.ros.administration.repository.AccountSubscriptionRepository;
 import com.ros.administration.repository.FeatureRepository;
 
 
@@ -60,6 +64,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	
 	@Autowired
 	private ProductMapper productMapper;
+	
+	@Autowired
+	private AccountSubscriptionRepository accountSubscriptionRepository;
 
 	@Override
 	public SubscriptionDto addSubscription(SubscriptionDto subsciptionDto) throws SubscriptionAlreadyExistsException {
@@ -249,4 +256,36 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         }
         return productCodes;
     }
-}
+
+    @Override
+    public AccountSubscriptionDto getAccountSubscriptionById(UUID id) {
+        AccountSubscription subscription = accountSubscriptionRepository.getById(id);
+        AccountSubscriptionDto subscriptionDto = new AccountSubscriptionDto();
+        subscriptionDto.setAccountSubId(subscription.getId());
+        //      subscriptionDto.setSubscription(subscription.getSubscription());
+        subscriptionDto.setActivatedBy(subscription.getActivatedBy());
+        subscriptionDto.setActivatedDate(subscription.getActivatedDate());
+        subscriptionDto.setExpiryDate(subscription.getExpiryDate());
+        subscriptionDto.setStatus(subscription.getStatus());
+        return subscriptionDto;
+    }
+
+    @Override
+    public String updateActiveOrDeactiveAccountSubscription(AccountSubscriptionDto2 subsciptionDto) {
+        AccountSubscription subscription = accountSubscriptionRepository.getById(subsciptionDto.getAccountSubId());
+        if (subsciptionDto.isSubscriptionActive()) {
+            subscription.setStatus(EStatus.ACTIVE);
+        } else {
+            subscription.setStatus(EStatus.INACTIVE);
+        }
+        subscription = accountSubscriptionRepository.save(subscription);
+        String statusMsg;
+        if (subscription.getStatus() == EStatus.ACTIVE) {
+            statusMsg = "Activition of subscription Successfully.";
+        } else {
+            statusMsg = "Deactivition of subscription Successfully.";
+        }
+        return statusMsg;
+    }
+  }
+

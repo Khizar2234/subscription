@@ -16,4 +16,7 @@ public interface AccountSubscriptionRepository extends JpaRepository<AccountSubs
 
 	@Query(value="select * from account_subscription where account_id = :accountId limit 1", nativeQuery = true)
 	AccountSubscription getMasterAccountSubscription(@Param("accountId") UUID accountId);
+	
+    @Query(value = "update account_subscription set status = 'INACTIVE' where account_subscription_id = :accountSubscriptionId limit 1", nativeQuery = true)
+    AccountSubscription deactivateSubscription(@Param("accountSubscriptionId") UUID accountId);
 }

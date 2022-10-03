@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.ros.administration.controller.dto.ProductDto;
+import com.ros.administration.controller.dto.account.AccountSubscriptionDto;
+import com.ros.administration.controller.dto.account.AccountSubscriptionDto2;
 import com.ros.administration.controller.dto.subscription.SubscriptionDto;
 import com.ros.administration.exceptions.SubscriptionAlreadyExistsException;
 import com.ros.administration.exceptions.SubscriptionNotFoundException;
@@ -40,4 +42,8 @@ public interface SubscriptionService {
 	List<String> getSubscriptionByProductCode(String productCode);
 	
 	SubscriptionDto getSubscriptionBySubscriptionCode(String subscriptionCode);
+	
+	 String updateActiveOrDeactiveAccountSubscription(AccountSubscriptionDto2 subsciptionDto);
+	 
+	 AccountSubscriptionDto getAccountSubscriptionById(UUID id);
 }
