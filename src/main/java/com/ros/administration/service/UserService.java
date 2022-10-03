@@ -25,7 +25,6 @@ import com.ros.administration.controller.dto.account.user.UserStatusDto;
 import com.ros.administration.exceptions.PrimaryContactNotFoundException;
 import com.ros.administration.exceptions.UserAlreadyExistsException;
 import com.ros.administration.exceptions.UserNotFoundException;
-import com.ros.administration.model.Restaurant;
 import com.ros.administration.model.account.User;
 import com.ros.administration.model.account.UserProfile;
 import com.ros.administration.model.enums.EStatus;
@@ -86,9 +85,5 @@ public interface UserService {
 
 	String editTabletPin(String username, String oldPin, String newpin) throws Exception;
 	
-	List<UUID> getUserIdsFromRestaurantId(UUID restaurantId);
 	
-    int totalCountOfUsersFromrestaurants(List<Restaurant> restaurants);
-
-
 }

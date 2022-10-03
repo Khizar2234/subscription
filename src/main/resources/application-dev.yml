@@ -6,30 +6,30 @@ spring:
   application:
     name: administration-service
   datasource:
-    url: jdbc:postgresql://sqladmin.postgres.database.azure.com:5432/Subscription?&sslmode=require
+    url: jdbc:postgresql://sqladmin.postgres.database.azure.com:5432/administration?&sslmode=require
     username: sqladmins
     password: password@123
-#    initialization-mode: always
+    #    initialization-mode: always
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-     ddl-auto: update
+      ddl-auto: update
     properties:
       hibernate:
-        dialect : org.hibernate.dialect.PostgreSQLDialect 
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         namingStrategy: org.hibernate.cfg.PhysicalNamingStrategy
         jdbc:
           lob:
             non_contextual_creation: true
     show-sql: true
-    
+
   cloud:
     discovery:
       enabled: true
-      
+
 swagger:
   url: https://administrationservice.test.restaurantonesolution.com/admin
-  
+
 eureka:
   client:
     register-with-eureka: false
@@ -43,6 +43,4 @@ eureka:
 #  app:
 #    jwtExpirationMs: 964000000
 #    jwtSecret: bezKoderSecretKey
-razorpay:
-  secretid: rzp_test_ZIZjFofMxouZaR
-  secretkey: DwEGVESHg0q3vb7mb1Ibd6wu
+
