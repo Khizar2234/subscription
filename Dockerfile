@@ -1,4 +1,4 @@
-FROM openjdk:11.0.3-jre-slim-stretch
+FROM openjdk:16
 VOLUME /config
 ADD target/AdministrationService-0.0.1-SNAPSHOT.jar /AdministrationService.jar
 EXPOSE 8097
